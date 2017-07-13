@@ -3,13 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>IOT-server</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style type="text/css">
+        h2 {
+            color: #444;
+            text-shadow:
+                1px 0px 1px #ccc, 0px 1px 1px #eee,
+                2px 1px 1px #ccc, 1px 2px 1px #eee,
+                3px 2px 1px #ccc, 2px 3px 1px #eee,
+                4px 3px 1px #ccc, 3px 4px 1px #eee,
+                5px 4px 1px #ccc, 4px 5px 1px #eee,
+                6px 5px 1px #ccc, 5px 6px 1px #eee,
+                7px 6px 1px #ccc;
+        }
+    </style>
 </head>
 <body>
-    <h1>Server work normally!</h1>
+    <style type="text/css">
+        .sp-picker-container {width: 500px}
+    </style>
 
-    <script src="../js/jquery.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="../js/app.js"></script>
+    <div class="container" style="padding: 20px">
+        <div style="display: flex; align-content: center; justify-content: center;">
+            <div>
+                <h2 style="font-weight: 900; text-align: center; margin: 0; margin-bottom: 20px">LED CONTROLL</h2>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center;">
+            <div style="align-self: flex-start;">
+            <div style="background-color: red; border-radius: 50%; border: solid; width: 60px; height: 60px; margin-bottom: 30px;"></div>
+                <input type="checkbox" data-toggle="toggle">
+            </div>
+            <div style="margin-left: 20px;">
+                <input id="colorpicker" />
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app.bundle.js"></script>
 </body>
 </html>

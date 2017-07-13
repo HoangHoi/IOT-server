@@ -1,28 +1,25 @@
 import './sass/app.scss';
 require('./bootstrap');
 
-$('#send').on('click', function () {
-    let message = $('#input').val();
-    if (message != '') {
-        $.ajax({
-            url: 'comment',
-            type: 'POST',
-            dataType: 'json',
-            data: {message: message},
+let socket = io();
+
+socket.on('led-status', function(data) {
+    console.log(data);
+});
+
+$('#colorpicker').spectrum({
+    color: '#f00',
+    flat: true,
+    width: '500px',
+    showInput: true,
+    allowEmpty: false,
+    // showAlpha: true,
+    showButtons: false,
+    showInitial: true,
+    preferredFormat: 'rgb',
+    move: function(color) {
+        socket.emit('led-change', {
+            color: color.toHexString()
         });
     }
 });
-
-// Echo.private('chat-room')
-//     .listen('ChatEvent', (e) => {
-//         console.log(e);
-//         $('#content').append(`<div class="well">${e.message}</div>`);
-//     });
-// Echo.channel('chat')
-//     .emit('typing', {
-//         name: 'aaa'
-//     });
-// Echo.private('chat-room')
-//     .listenForWhisper('typing', (e) => {
-//         console.log(e.name);
-//     });
