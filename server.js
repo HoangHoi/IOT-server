@@ -16,7 +16,7 @@ app.use(express.static(__dirname + '/public'));
 // var users = [];
 var ledRoom = 'led-room';
 var userRoom = 'user-room';
-var ledStatus = 'on';
+var ledStatus = 0;
 var ledColor = {
     r: 255,
     g: 255,
@@ -49,6 +49,7 @@ io.on('connection', function (socket) {
         }
 
         socket.broadcast.emit('led-change', data);
+
         console.log('Change led status'.gray);
         console.log('--status: '.gray + data.status);
         console.log('--color: '.gray);
@@ -56,6 +57,8 @@ io.on('connection', function (socket) {
         console.log(('----g: ' + data.color.g).green);
         console.log(('----b: ' + data.color.b).blue);
         console.log(('----a: ' + data.color.a).white);
+
+        // socket.emit('led-status', data);
     });
 
     socket.on('led-status', function(data) {
@@ -70,6 +73,9 @@ io.on('connection', function (socket) {
         } else {
             ledColor = data.color;
         }
+
+        console.log('Led status');
+        console.log(data);
 
         socket.broadcast.emit('led-status', data);
     });

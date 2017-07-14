@@ -2,7 +2,8 @@ import './sass/app.scss';
 require('./bootstrap');
 
 let socket = io();
-let ledStatus = 'off';
+let ledStatus = 0;
+let send = true;
 let ledColor = {
     r: 255,
     g: 255,
@@ -11,40 +12,38 @@ let ledColor = {
 };
 
 socket.on('led-status', function(data) {
+    console.log('led-status');
     console.log(data);
     ledStatus = data.status;
     ledColor = data.color;
+    console.log(111111);
     $('#led').css('background-color', 'rgba(' + ledColor.r + ', ' + ledColor.g + ', ' + ledColor.b + ', ' + ledColor.a + ')');
-    if (ledStatus == 'on') {
+    if (data.status) {
+        console.log(ledStatus);
+        console.log('ledStatus true');
         $('#led').css('box-shadow', '10px 10px 5px #888888');
-        $('#button').bootstrapToggle('on');
     } else {
+        console.log(ledStatus);
+        console.log('ledStatus false');
+        console.log(ledStatus);
         $('#led').css('box-shadow', 'none');
-        $('#button').bootstrapToggle('off');
     }
 });
 
 socket.emit('get-led-status');
 
 $('#button').change(function (event) {
-    // event.stopImmediatePropagation();
-    // console.log(event);
     var data;
-    if (ledStatus == 'on') {
-        data = {status: 'off'};
-        // $('#button').bootstrapToggle('off');
+    if ($(this).prop('checked')) {
+        data = {status: 1};
     } else {
-        data = {status: 'on'};
-        // $('#button').bootstrapToggle('on');
+        data = {status: 0};
     }
 
-    console.log(data);
     socket.emit('led-change', data);
 });
 
-$('#control').on('click', 'btn', function (event) {
-    event.preventDefault();
-});
+
 
 $('#colorpicker').spectrum({
     color: '#f00',
@@ -57,9 +56,12 @@ $('#colorpicker').spectrum({
     showInitial: true,
     preferredFormat: 'rgb',
     move: function(color) {
-        // console.log(color.toRgb());
-        socket.emit('led-change', {
-            color: color.toRgb()
-        });
+        if (send) {
+            send = false;
+            setTimeout(function(){send = true;}, 100);
+            socket.emit('led-change', {
+                color: color.toRgb()
+            });
+        }
     }
 });
