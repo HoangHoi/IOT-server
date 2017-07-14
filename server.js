@@ -16,8 +16,13 @@ app.use(express.static(__dirname + '/public'));
 // var users = [];
 var ledRoom = 'led-room';
 var userRoom = 'user-room';
-var ledStatus = 'x';
-var ledColor = '#000000'
+var ledStatus = 'on';
+var ledColor = {
+    r: 255,
+    g: 255,
+    b: 255,
+    a: 1,
+};
 // var addedDevice = false;
 // var addedUser = false;
 // var ledRoomInstance = io.sockets.in(ledRoom);
@@ -44,9 +49,37 @@ io.on('connection', function (socket) {
         }
 
         socket.broadcast.emit('led-change', data);
-        console.log('Change led status'.green);
-        console.log('--status: '.blue + data.status);
-        console.log('--color: '.blue + data.color);
+        console.log('Change led status'.gray);
+        console.log('--status: '.gray + data.status);
+        console.log('--color: '.gray);
+        console.log(('----r: ' + data.color.r).red);
+        console.log(('----g: ' + data.color.g).green);
+        console.log(('----b: ' + data.color.b).blue);
+        console.log(('----a: ' + data.color.a).white);
+    });
+
+    socket.on('led-status', function(data) {
+        if (typeof data.status == 'undefined') {
+            data.status = ledStatus;
+        } else {
+            ledStatus = data.status;
+        }
+
+        if (typeof data.color == 'undefined') {
+            data.color = ledColor;
+        } else {
+            ledColor = data.color;
+        }
+
+        socket.broadcast.emit('led-status', data);
+    });
+
+    socket.on('get-led-status', function() {
+        var data = {
+            status: ledStatus,
+            color: ledColor
+        };
+        socket.emit('led-status', data);
     });
 
     socket.on('disconnect', function () {
